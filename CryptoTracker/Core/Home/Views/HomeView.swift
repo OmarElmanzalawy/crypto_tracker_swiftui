@@ -26,7 +26,7 @@ struct HomeView: View {
 
 #Preview {
     NavigationStack {
-        HomeView()
+        HomeView()f
             .navigationBarHidden(true)
     }
 }
@@ -54,6 +54,5 @@ extension HomeView{
                 }
         }
         .padding(.horizontal)
-        
     }
 }

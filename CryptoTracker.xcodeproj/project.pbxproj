@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		045EA7072E022E5500DCF21B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 045EA7062E022E5500DCF21B /* Kingfisher */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		045EA6912E008DE400DCF21B /* CryptoTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				045EA7072E022E5500DCF21B /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = CryptoTracker;
 			packageProductDependencies = (
+				045EA7062E022E5500DCF21B /* Kingfisher */,
 			);
 			productName = CryptoTracker;
 			productReference = 045EA6912E008DE400DCF21B /* CryptoTracker.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 045EA6882E008DE400DCF21B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				045EA7052E022E5500DCF21B /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 045EA6922E008DE400DCF21B /* Products */;
 			projectDirPath = "";
@@ -334,6 +343,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		045EA7052E022E5500DCF21B /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		045EA7062E022E5500DCF21B /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 045EA7052E022E5500DCF21B /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 045EA6892E008DE400DCF21B /* Project object */;
 }

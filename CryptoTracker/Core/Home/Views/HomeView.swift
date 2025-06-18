@@ -16,7 +16,6 @@ struct HomeView: View {
         ZStack{
             Color.theme.background
                 .ignoresSafeArea()
-            
             VStack{
                 homeHeader
                 HomeStatsView(showPortfolio: $showPortfolio)

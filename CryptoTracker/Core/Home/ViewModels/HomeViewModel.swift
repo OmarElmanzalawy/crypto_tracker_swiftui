@@ -10,6 +10,12 @@ import Combine
 
 class HomeViewModel: ObservableObject{
     
+    @Published var statistics: [Statistic] = [
+        Statistic(title: "Title", value: "Value", percentageChange: 2.00),
+        Statistic(title: "Title", value: "Value"),
+        Statistic(title: "Title", value: "Value", percentageChange: 2.00),
+        Statistic(title: "Title", value: "Value", percentageChange: -2.00),
+    ]
     @Published var allCoins: [Coin] = []
     @Published var portfolioCoins: [Coin] = []
     @Published var searchText: String = ""
@@ -22,11 +28,6 @@ class HomeViewModel: ObservableObject{
     }
     
     private func addSubscribeers(){
-//        dataService.$allCoins.sink { [weak self] returnedCoins in
-//            self?.allCoins = returnedCoins
-//        }
-//        .store(in: &cancellables)
-//        
         $searchText
             .combineLatest(dataService.$allCoins)
         //waits for both observables to emit a value before executing the closure

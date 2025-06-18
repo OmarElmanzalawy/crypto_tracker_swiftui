@@ -19,7 +19,7 @@ struct HomeView: View {
             
             VStack{
                 homeHeader
-                
+                HomeStatsView(showPortfolio: $showPortfolio)
                 SearchBarView(searchText: $vm.searchText)
                 
                 columnTitles
@@ -31,7 +31,6 @@ struct HomeView: View {
                     portfolioCoinsList
                         .transition(.move(edge: .trailing))
                 }
-                
                 Spacer(minLength: 0)
             }
         }

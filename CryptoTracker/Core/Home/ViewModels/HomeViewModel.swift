@@ -46,7 +46,7 @@ class HomeViewModel: ObservableObject{
             }
             .store(in: &cancellables)
         
-        // updates marketdata
+        // updates marketdata 
         marketService.$marketData
             .map({ (marketData) -> [Statistic] in
                 var stats: [Statistic] = []

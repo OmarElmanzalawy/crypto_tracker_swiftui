@@ -40,7 +40,7 @@ struct PortfolioView: View {
                             HStack{
                                 Text("Current value:")
                                 Spacer()
-                                Text("")
+                                Text(getCurrentValue().asCurrencyWith2Decimals())
                             }
                             Divider()
                         }
@@ -49,6 +49,11 @@ struct PortfolioView: View {
                 }
             }
                 .navigationTitle("Edit Portfolio")
+                .onChange(of: vm.searchText, { _, newValue in
+                    if newValue == ""{
+                        removeSelectedCoin()
+                    }
+                })
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         XMarkButton()
@@ -58,9 +63,12 @@ struct PortfolioView: View {
                             Image(systemName: "checkmark")
                                 .opacity(showCheckmark ? 1 : 0)
                             Button(action: {
-                                guard let coin = selectedCoin else{return}
+                                
+                                guard let coin = selectedCoin, let amount = Double(quantityText)
+                                else{return}
                                 
                                 //save to portfolio
+                                vm.updatePortfiolio(coin: coin, amount: amount)
                                 
                                 //show checkmark
                                 withAnimation(.easeIn) {
@@ -98,6 +106,25 @@ struct PortfolioView: View {
         }
         return 0
     }
+    
+    private func removeSelectedCoin(){
+        guard let coin = selectedCoin else{return}
+        //show checkmark
+        withAnimation(.easeIn) {
+            showCheckmark = true
+            selectedCoin = nil
+            vm.searchText = ""
+        }
+        //hide keyboard
+        UIApplication.shared.endEditing()
+        
+        // hide checkmark after delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+            withAnimation(.easeOut) {
+                showCheckmark = false
+            }
+        }
+    }
 }
 
 #Preview {
@@ -116,6 +143,13 @@ extension PortfolioView{
                         .onTapGesture(perform: {
                             withAnimation(.easeIn) {
                                 selectedCoin = coin
+                                if let portfolioCoin = vm.portfolioCoins.first(where: {$0.id == coin.id}),
+                                   let amount = portfolioCoin.currentHoldings
+                                {
+                                    quantityText = "\(amount)"
+                                }else{
+                                    quantityText = ""
+                                }
                             }
                         })
                         .background(

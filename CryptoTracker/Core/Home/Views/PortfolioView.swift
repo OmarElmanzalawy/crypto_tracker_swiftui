@@ -15,10 +15,9 @@ struct PortfolioView: View {
     @State private var showCheckmark: Bool = false
     
     var body: some View {
-        
     NavigationStack {
-            ScrollView {
-                VStack {
+        ScrollView {
+            VStack {
                     SearchBarView(searchText: $vm.searchText)
                     coinLogoList
                     if  selectedCoin != nil{

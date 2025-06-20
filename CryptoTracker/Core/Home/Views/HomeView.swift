@@ -39,6 +39,10 @@ struct HomeView: View {
                 Spacer(minLength: 0)
             }
         }
+        .refreshable {
+            print("Reloading data")
+            vm.reloadData()
+        }
     }
 }
 

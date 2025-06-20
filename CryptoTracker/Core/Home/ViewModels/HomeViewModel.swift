@@ -12,6 +12,7 @@ class HomeViewModel: ObservableObject{
     
     @Published var statistics: [Statistic] = []
     @Published var allCoins: [Coin] = []
+    @Published var isLoading: Bool = false
     @Published var portfolioCoins: [Coin] = []
     @Published var searchText: String = ""
     
@@ -47,30 +48,6 @@ class HomeViewModel: ObservableObject{
             }
             .store(in: &cancellables)
         
-        // updates marketdata 
-        marketService.$marketData
-            .map({ (marketData) -> [Statistic] in
-                var stats: [Statistic] = []
-                
-                guard let data = marketData else{
-                    return stats
-                }
-                
-                let marketCap = Statistic(title: "Market Cap", value: data.marketCap, percentageChange: data.marketCapChangePercentage24HUsd)
-                let volume = Statistic(title: "24H Volume", value: data.volume)
-                let btcDominance = Statistic(title: "BTC Dominance", value: data.btcDominance)
-                let portfolio = Statistic(title: "Portfolio Value", value: "$0.00",percentageChange: 0)
-                
-                stats.append(contentsOf: [
-                    marketCap,volume,btcDominance,portfolio
-                ])
-                return stats
-            })
-            .sink{ [weak self] (returnedStats) in
-                self?.statistics = returnedStats
-            }
-            .store(in: &cancellables)
-        
         //updates portfolioCoins
         $allCoins
             .combineLatest(portfolioDataService.$savedEntities)
@@ -86,9 +63,59 @@ class HomeViewModel: ObservableObject{
                 self?.portfolioCoins = savedCoins
             }
             .store(in: &cancellables)
+        
+        // updates marketdata 
+        marketService.$marketData
+            .combineLatest($portfolioCoins)
+            .map({ (marketData,portfolioCoins) -> [Statistic] in
+                var stats: [Statistic] = []
+                
+                guard let data = marketData else{
+                    return stats
+                }
+                
+                let marketCap = Statistic(title: "Market Cap", value: data.marketCap, percentageChange: data.marketCapChangePercentage24HUsd)
+                let volume = Statistic(title: "24H Volume", value: data.volume)
+                let btcDominance = Statistic(title: "BTC Dominance", value: data.btcDominance)
+                
+                //Get holding value for each coin and then combine them
+                let portfolioValue = portfolioCoins.map({$0.currentHoldingValue})
+                    .reduce(0, +)
+                
+                let previousValue = portfolioCoins.map({(coin) -> Double in
+                    let currentValue = coin.currentHoldingValue
+                    let percentageChange = coin.priceChangePercentage24H! / 100
+                    return currentValue / (1 + percentageChange)
+                })
+                    .reduce(0, +)
+                
+                let percentageChange = ((portfolioValue - previousValue) / previousValue) * 100
+                
+                let portfolio = Statistic(title: "Portfolio Value", value: portfolioValue.asCurrencyWith2Decimals(),percentageChange: percentageChange)
+                
+                stats.append(contentsOf: [
+                    marketCap,volume,btcDominance,portfolio
+                ])
+                return stats
+            })
+            .sink{ [weak self] (returnedStats) in
+                self?.statistics = returnedStats
+                self?.isLoading = false
+            }
+            .store(in: &cancellables)
+        
+        
     }
     
     func updatePortfiolio(coin: Coin, amount: Double){
         portfolioDataService.updatePortfolio(coin: coin, amount: amount)
     }
+    
+    func reloadData(){
+        isLoading = true
+        coinService.getCoins()
+        marketService.getData()
+        HapticManager.notification(type: .success)
+    }
+    
 }

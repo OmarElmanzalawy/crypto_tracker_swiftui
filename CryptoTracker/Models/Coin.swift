@@ -326,3 +326,14 @@ struct SparklineIn7D: Codable {
     let price: [Double]?
 }
 
+
+extension Coin: Hashable {
+    
+    static func == (lhs: Coin, rhs: Coin) -> Bool {
+           lhs.id == rhs.id
+       }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}

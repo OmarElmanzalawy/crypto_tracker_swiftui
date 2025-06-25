@@ -21,7 +21,7 @@ struct CryptoTrackerApp: App {
         WindowGroup {
             NavigationStack {
                 HomeView()
-                    .navigationBarHidden(true)
+//                    .navigationBarHidden(true)
             }
             .environmentObject(vm)
         }

@@ -123,38 +123,37 @@ extension HomeView{
             .onTapGesture {
                 withAnimation(.default) {
                     vm.sortOption = vm.sortOption == .rank ? .rankReversed : .rank
-            }
-            Spacer()
-            showPortfolio ? HStack {
-                Text("Holdings")
-                Image(systemName: "chevron.down")
-                    .opacity((vm.sortOption == .holdings || vm.sortOption == .holdingsReversed) ? 1.0 : 0.0)
-                    .rotationEffect(Angle(degrees: vm.sortOption == .holdings ? 0 : 180))
-            }
-            .onTapGesture {
-                withAnimation(.default) {
-                    vm.sortOption = vm.sortOption == .holdings ? .holdingsReversed : .holdings
+                }
+                Spacer()
+                showPortfolio ? HStack {
+                    Text("Holdings")
+                    Image(systemName: "chevron.down")
+                        .opacity((vm.sortOption == .holdings || vm.sortOption == .holdingsReversed) ? 1.0 : 0.0)
+                        .rotationEffect(Angle(degrees: vm.sortOption == .holdings ? 0 : 180))
+                }
+                .onTapGesture {
+                    withAnimation(.default) {
+                        vm.sortOption = vm.sortOption == .holdings ? .holdingsReversed : .holdings
+                    }
+                }
+                : nil
+                HStack {
+                    Text("Price")
+                        .frame(width: UIScreen.main.bounds.width / 3.6, alignment: .trailing)
+                    Image(systemName: "chevron.down")
+                        .opacity((vm.sortOption == .price || vm.sortOption == .priceReversed) ? 1.0 : 0.0)
+                }
+                .onTapGesture {
+                    withAnimation(.default) {
+                        vm.sortOption = vm.sortOption == .price ? .priceReversed : .price
+                    }
                 }
             }
-            : nil
-            HStack {
-                Text("Price")
-                    .frame(width: UIScreen.main.bounds.width / 3.6, alignment: .trailing)
-                Image(systemName: "chevron.down")
-                    .opacity((vm.sortOption == .price || vm.sortOption == .priceReversed) ? 1.0 : 0.0)
-            }
-            .onTapGesture {
-                withAnimation(.default) {
-                    vm.sortOption = vm.sortOption == .price ? .priceReversed : .price
-                }
-            }
+            
+            .font(.caption)
+            .foregroundStyle(Color.theme.secondaryText)
+            .padding(.horizontal)
         }
         
-        .font(.caption)
-        .foregroundStyle(Color.theme.secondaryText)
-        .padding(.horizontal)
     }
-    
 }
-
-

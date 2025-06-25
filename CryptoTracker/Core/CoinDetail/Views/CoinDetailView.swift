@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct CoinDetailView: View {
-    let coin: Coin
+    @StateObject var vm: CoinDetailViewModel
     
     init(coin: Coin) {
-        self.coin = coin
+        _vm = StateObject(wrappedValue: CoinDetailViewModel(coin: coin))
         print("init called with coin: \(coin.name)")
     }
     
     var body: some View {
-        Text(coin.name)
+        EmptyView()
     }
 }
 

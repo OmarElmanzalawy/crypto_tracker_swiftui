@@ -13,6 +13,7 @@ struct HomeView: View {
     @State private var showPortfolio: Bool = false
     @State private var showPortfolioView: Bool = false //new sheet
     @State private var selectedCoin: Coin? = nil
+    @State private var showSettingsView: Bool = false
     
     var body: some View {
         ZStack{
@@ -39,14 +40,14 @@ struct HomeView: View {
                 }
                 Spacer(minLength: 0)
             }
+            .sheet(isPresented: $showSettingsView) {
+                SettingsView()
+            }
         }
         .navigationDestination(item: $selectedCoin, destination: { coin in
             CoinDetailView(coin: coin)
         })
-        .refreshable {
-            print("Reloading data")
-            vm.reloadData()
-        }
+        
     }
 }
 
@@ -67,6 +68,8 @@ extension HomeView{
                 .onTapGesture {
                     if showPortfolio{
                         showPortfolioView.toggle()
+                    }else{
+                        showSettingsView.toggle()
                     }
                 }
                 .background(
@@ -100,6 +103,10 @@ extension HomeView{
             }
         }
         .listStyle(.plain)
+        .refreshable {
+            print("Reloading data")
+            vm.reloadData()
+        }
     }
     
     private var portfolioCoinsList: some View{
@@ -110,6 +117,10 @@ extension HomeView{
             }
         }
         .listStyle(.plain)
+        .refreshable {
+            print("Reloading data")
+            vm.reloadData()
+        }
     }
     
     private var columnTitles: some View{

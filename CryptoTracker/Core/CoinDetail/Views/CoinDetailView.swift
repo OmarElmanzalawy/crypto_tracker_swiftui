@@ -10,6 +10,7 @@ import SwiftUI
 struct CoinDetailView: View {
     
     @StateObject private var vm: CoinDetailViewModel
+    @State private var showFullDescription: Bool = false
     private let columns: [GridItem] = [
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -18,7 +19,6 @@ struct CoinDetailView: View {
     
     init(coin: Coin) {
         _vm = StateObject(wrappedValue: CoinDetailViewModel(coin: coin))
-        print("init called with coin: \(coin.name)")
     }
     
     var body: some View {
@@ -27,6 +27,20 @@ struct CoinDetailView: View {
             VStack(spacing: spacing){
                 overviewSection
                 additionalSection
+                VStack(alignment: .leading){
+                    if let websiteUrl = vm.websiteUrl,
+                       let url = URL(string: websiteUrl){
+                        Link("Website", destination: url)
+                    }
+                    if let redditUrl = vm.redditUrl,
+                       let url = URL(string: redditUrl){
+                        Link("Reddit", destination: url)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundStyle(.blue)
+                .font(.headline)
+                
             }
             .padding()
             .navigationTitle(vm.coin.name)
@@ -42,8 +56,10 @@ struct CoinDetailView: View {
                 }
             }
         }
+        .onAppear {
+            print("description fetched: \(vm.coinDescription)")
+        }
     }
-        
 }
 
 #Preview {
@@ -61,6 +77,22 @@ extension CoinDetailView {
                 .foregroundStyle(Color.theme.accent)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Divider()
+            if let coinDescription = vm.coinDescription, !coinDescription.isEmpty {
+                VStack(alignment: .leading){
+                    Text(coinDescription)
+                        .font(.callout)
+                        .foregroundStyle(Color.theme.secondaryText)
+                        .lineLimit(showFullDescription ? nil : 3)
+                    Button(showFullDescription ? "Collapse" :"Show more...") {
+                        withAnimation(.easeInOut) {
+                            showFullDescription.toggle()
+                        }
+                    }
+                    .padding(.vertical,4)
+                    .foregroundStyle(Color.blue)
+                    .font(.caption)
+                }
+            }
             LazyVGrid(columns: columns,alignment: .leading,spacing: spacing) {
                 ForEach(vm.overviewStatistics){ stat in
                     StatisticView(stat: stat)

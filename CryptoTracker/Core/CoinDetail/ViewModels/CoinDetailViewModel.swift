@@ -46,7 +46,7 @@ class CoinDetailViewModel: ObservableObject{
         let priceStat = Statistic(title: "Current Price", value: price, percentageChange: priceChange)
         
         let marketCap = "$" + (coin.marketCap?.formattedWithAbbreviations() ?? "")
-        let marketCapChange = coin.marketCapChange24H
+        let marketCapChange = coin.marketCapChangePercentage24H
         let marketStat = Statistic(title: "Market Cap", value: marketCap, percentageChange: marketCapChange)
         
         let rank = "\(coin.rank)"
